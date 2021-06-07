@@ -5,6 +5,7 @@ import './SafeMath.sol';
 contract Dex{
   using SafeMath for uint;// add, sub, mul uses the safeMath contract
   struct Token{
+    uint id;
     bytes32 ticker;
     address tokenAddress;
   }
@@ -29,6 +30,7 @@ contract Dex{
   mapping(bytes32=> mapping(uint =>Order[]))public orderBook;//enum will be casted into uint ie buy=0 sell=1
   uint public nextOrderId;
   uint public nextTradeId;
+  uint public nextTokenId;
   bytes32 constant DAI = bytes32('DAI');
   event newTrade(
     uint tradeId,
@@ -43,13 +45,32 @@ contract Dex{
   constructor () {
     admin= msg.sender;
   }
-
+  function getOrders(
+    bytes32 ticker, 
+    Side side
+    ) 
+    external 
+    view
+    returns(Order[] memory) {
+    return orderBook[ticker][uint(side)];
+  }
+   function getTokens() external view returns(Token[] memory) {
+      Token[] memory _tokens = new Token[](tokenList.length);
+      for (uint i = 0; i < tokenList.length; i++) {
+        _tokens[i] = Token(tokens[tokenList[i]].id,tokens[tokenList[i]].ticker, tokens[tokenList[i]].tokenAddress);
+        //  tokens[tokenList[i]].id,
+        //   tokens[tokenList[i]].symbol,
+        //   tokens[tokenList[i]].at
+      }
+      return _tokens;
+    }
   function addToken( 
     bytes32 ticker,
     address tokenAddress
   ) onlyAdmin external{
-    tokens[ticker]= Token(ticker, tokenAddress);
+    tokens[ticker]= Token(nextTokenId,ticker, tokenAddress);
     tokenList.push(ticker);
+    nextTokenId++;
   }
   function deposit(
     uint amount,
@@ -93,7 +114,7 @@ contract Dex{
     );
     //bubble sort algorithm to sort orders buy(descending), sell(ascending)
     uint i = orders.length > 0 ? orders.length - 1 : 0;
-    while(i < 0){
+    while(i > 0){
       if(side == Side.BUY && orders[i-1].price > orders[i].price){
         //stopping condition
         break;
