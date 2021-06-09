@@ -1,0 +1,44 @@
+.dropdown { 
+  margin-left: 50px;
+  margin-right: 100px;
+  button{
+    color: white;
+    padding: 15px;
+  }
+  .dropdown-toggle {
+    background-color: black;
+    border: 1px solid rgb(40,40,40);
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .dropdown-menu {
+    background-color: black;
+    border: 1px solid rgb(40,40,40);
+    display: none;
+    color: white;
+    a{
+      text-decoration: none;
+    }
+    .dropdown-item {
+      color: white;
+      padding: 13px;
+    }
+   .dropdown-item.active {
+      background-color: #731DD8; 
+      color: white;
+    }
+    .dropdown-item:hover{
+      background-color: #441282;
+      color: white;
+    }
+  }
+
+  .visible {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    
+  }
+}

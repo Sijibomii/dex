@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import LoadingContainer from './LoadingContainer';
 import reportWebVitals from './reportWebVitals';
-
+import './scss/index.scss';
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <LoadingContainer />
   </React.StrictMode>,
   document.getElementById('root')
 );
